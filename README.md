@@ -54,3 +54,6 @@
 * 为服务器设置channel
 * 设置处理从线程池的助手类初始化器
 * 监听启动和关闭服务器
+#### 设置channel初始化器
+每一个channel由多个handler共同组成管道(pipeline)
+![](image/设置channel初始化.png)

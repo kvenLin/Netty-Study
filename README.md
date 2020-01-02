@@ -1,5 +1,5 @@
 # Netty-SpringBoot学习笔记
-## Netty初始
+## Netty初识
 ### IO基本概念
 #### 阻塞和非阻塞
 >如果说当前这个资源没有准备就绪,在这个时候该线程就会有两种处理的方式,一种就是阻塞,一种就是非阻塞
@@ -57,3 +57,12 @@
 #### 设置channel初始化器
 每一个channel由多个handler共同组成管道(pipeline)
 ![](image/设置channel初始化.png)
+
+## WebSocket api
+* var socket = new WebSocket("ws://[ip]:[port]")
+* 生命周期:
+    * onopen():当我们的客户端和服务端建立连接的时候会触发
+    * onmessage():收到消息时会触发
+    * onerror():出现一些异常
+    * onclose():客户端和服务端连接关闭触发
+* 主动方法: Socket.send() Socket.close()

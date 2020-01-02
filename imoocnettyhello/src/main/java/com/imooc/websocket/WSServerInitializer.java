@@ -1,4 +1,4 @@
-package com.imooc.netty.websocket;
+package com.imooc.websocket;
 
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelPipeline;
@@ -41,7 +41,7 @@ public class WSServerInitializer extends ChannelInitializer<SocketChannel> {
          */
         pipeline.addLast(new WebSocketServerProtocolHandler("/ws"));
 
-        //自定义的handler
-        pipeline.addLast(null);
+        //自定义的handler, 读取客户端的消息
+        pipeline.addLast(new ChatHandler());
     }
 }

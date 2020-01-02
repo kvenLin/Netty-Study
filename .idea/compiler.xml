@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="imoocnettyhello" target="1.5" />
+      <module name="imoocnettyhello" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

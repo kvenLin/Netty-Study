@@ -1,4 +1,4 @@
-package com.imooc.netty.websocket;
+package com.imooc.websocket;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -20,7 +20,7 @@ public class WSServer {
             ServerBootstrap server = new ServerBootstrap();
             server.group(mainGroup, subGroup)
                     .channel(NioServerSocketChannel.class)
-                    .childHandler(null);
+                    .childHandler(new WSServerInitializer());
             ChannelFuture future = server.bind(8080).sync();
             future.channel().closeFuture().sync();
         }finally {

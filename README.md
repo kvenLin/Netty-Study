@@ -66,3 +66,9 @@
     * onerror():出现一些异常
     * onclose():客户端和服务端连接关闭触发
 * 主动方法: Socket.send() Socket.close()
+
+## app开发记录
+### 使用工具
+* [MUI](http://www.dcloud.io)
+* [H5 PLUS (H5+)](http://www.html5plus.org/doc)
+* HBuilder

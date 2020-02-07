@@ -7,10 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="imoocnettyhello" />
+        <module name="miniwechet" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="imoocnettyhello" target="8" />
+      <module name="miniwechet" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

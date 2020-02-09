@@ -1,0 +1,55 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/wechat-dev?characterEncoding=utf-8&useSSL=false
+    #配置HikariCP数据源
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      #等待连接池分配连接的最大时长（毫秒），超过这个时长没有可用的连接则发生SQLException，默认30秒
+      connection-timeout: 30000
+      #最小连接数
+      minimum-idle: 5
+      #最大连接数
+      maximum-pool-size: 15
+      #自动提交
+      auto-commit: true
+      #一个连接idle状态的最大时长（毫秒），超时则被回收，默认10分钟
+      idle-timeout: 600000
+      #连接池名字
+      pool-name: DatebookHikariCP
+      #一个连接的生命时长（毫秒），超时且没有被使用则释放，默认30分钟1800000ms
+      max-lifetime: 28740000
+      connection-test-query: SELECT 1
+  redis:
+    port: 6379
+    host: localhost
+mybatis:
+  type-aliases-package: com.swpu.uchain.openexperiment.domain
+  mapper-locations: classpath:mappers/*.xml
+###security###
+jwt:
+  secret: swpu-uchain
+  expiration: 1296000
+#redis
+redis:
+  host: localhost
+  port: 6379
+  timeout: 10
+  poolMaxTotal: 1000
+  poolMaxIdle: 500
+  poolMaxWait: 500
+##page##
+page:
+  count:
+    announcement: 10
+    project: 5
+    check-user: 10
+    check-project: 7
+    manage-user: 7
+    manage-role: 7
+server:
+  tomcat:
+    uri-encoding: utf-8
+

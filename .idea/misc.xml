@@ -85,6 +85,7 @@
       <list>
         <option value="$PROJECT_DIR$/imoocnettyhello/pom.xml" />
         <option value="$PROJECT_DIR$/miniwechet/pom.xml" />
+        <option value="$PROJECT_DIR$/miniwechat/pom.xml" />
       </list>
     </option>
   </component>

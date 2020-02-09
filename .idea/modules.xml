@@ -4,7 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Netty-Study.iml" filepath="$PROJECT_DIR$/Netty-Study.iml" />
       <module fileurl="file://$PROJECT_DIR$/imoocnettyhello/imoocnettyhello.iml" filepath="$PROJECT_DIR$/imoocnettyhello/imoocnettyhello.iml" />
-      <module fileurl="file://$PROJECT_DIR$/miniwechet/miniwechet.iml" filepath="$PROJECT_DIR$/miniwechet/miniwechet.iml" />
+      <module fileurl="file://$PROJECT_DIR$/miniwechat/miniwechat.iml" filepath="$PROJECT_DIR$/miniwechat/miniwechat.iml" />
     </modules>
   </component>
 </project>

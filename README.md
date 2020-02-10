@@ -72,3 +72,12 @@
 * [MUI](http://www.dcloud.io)
 * [H5 PLUS (H5+)](http://www.html5plus.org/doc)
 * HBuilder
+## FastDFS
+![流程图](/image/WX20200210-131140.png)
+### 主要命令记录
+#### tracker
+* 启动tracker: sudo fdfs_trackerd /etc/fdfs/tracker.conf
+* 重启tracker: sudo fdfs_trackerd /etc/fdfs/tracker.conf restart
+#### storage
+* 启动storage: sudo fdfs_storaged /etc/fdfs/storage.conf
+* 重启storage: sudo fdfs_storaged /etc/fdfs/storage.conf restart

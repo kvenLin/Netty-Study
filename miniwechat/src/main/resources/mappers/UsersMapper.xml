@@ -25,13 +25,29 @@
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.clf.miniwechat.domain.Users" >
     update users
-    set username = #{username,jdbcType=VARCHAR},
-      `password` = #{password,jdbcType=VARCHAR},
-      face_image = #{faceImage,jdbcType=VARCHAR},
-      face_image_big = #{faceImageBig,jdbcType=VARCHAR},
-      nickname = #{nickname,jdbcType=VARCHAR},
-      qrcode = #{qrcode,jdbcType=VARCHAR},
-      cid = #{cid,jdbcType=VARCHAR}
+    <trim prefix="set" suffixOverrides=",">
+      <if test="username != null">
+          username = #{username,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+          `password` = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="face_image != null">
+          face_image = #{faceImage,jdbcType=VARCHAR},
+      </if>
+      <if test="face_image_big != null">
+          face_image_big = #{faceImageBig,jdbcType=VARCHAR},
+      </if>
+      <if test="nickname != null">
+          nickname = #{nickname,jdbcType=VARCHAR},
+      </if>
+      <if test="qrcode != null">
+          qrcode = #{qrcode,jdbcType=VARCHAR},
+      </if>
+      <if test="cid != null">
+        cid = #{cid,jdbcType=VARCHAR},
+      </if>
+    </trim>
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >

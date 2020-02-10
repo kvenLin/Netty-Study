@@ -4,7 +4,6 @@ spring:
   datasource:
     username: root
     password: Qq771.com
-
   servlet:
     multipart:
       enabled: true
@@ -12,3 +11,4 @@ spring:
       max-file-size: 102400000
       # 设置总上传数据总大小 30MB
       max-request-size: 307200000
+tmpFilePath: "/Users/mac/Downloads/tmp/"

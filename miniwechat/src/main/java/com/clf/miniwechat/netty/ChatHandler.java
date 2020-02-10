@@ -6,7 +6,7 @@ import io.netty.channel.group.ChannelGroup;
 import io.netty.channel.group.DefaultChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.util.concurrent.GlobalEventExecutor;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
  * @Description: 处理消息的handler
  * TextWebSocketFrame: 在netty中, 用于为WebSocket专门处理文本的对象, frame是消息的载体
  */
-@Log
+@Slf4j
 public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
     /**
@@ -56,7 +56,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     public void handlerRemoved(ChannelHandlerContext ctx) throws Exception {
         //当初发handlerRemoved, ChannelGroup会自动移除对应客户端的channel
 //        clients.remove(ctx.channel());
-        log.warning("客户端断开, channel对应的长id: " + ctx.channel().id().asLongText());
-        log.warning("客户端断开, channel对应的短id: " + ctx.channel().id().asShortText());
+        log.warn("客户端断开, channel对应的长id: " + ctx.channel().id().asLongText());
+        log.warn("客户端断开, channel对应的短id: " + ctx.channel().id().asShortText());
     }
 }

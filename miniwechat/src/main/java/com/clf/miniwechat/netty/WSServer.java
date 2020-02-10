@@ -5,7 +5,7 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
  * @Description:
  */
 @Component
-@Log
+@Slf4j
 public class WSServer {
 
     private static class SingletonWSServer{
@@ -35,7 +35,7 @@ public class WSServer {
         server.group(mainGroup, subGroup)
             .channel(NioServerSocketChannel.class)
             .childHandler(new WSServerInitializer());
-        log.info("netty websocket server 启动完毕。。。。");
+        log.warn("netty websocket server 启动完毕。。。。");
     }
     public void  start() {
         this.future = server.bind(8088);

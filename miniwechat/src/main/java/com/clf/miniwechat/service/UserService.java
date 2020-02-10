@@ -29,4 +29,11 @@ public interface UserService {
      * @return
      */
     Users saveUser(Users user) throws Exception;
+
+    /**
+     * 更新用户信息
+     * @param user
+     * @return
+     */
+    Users updateUserInfo(Users user);
 }

@@ -18,4 +18,7 @@ public interface FriendsRequestMapper {
 
     FriendsRequest selectBySendUserIdAndAcceptUserId(@Param("sendUserId") String sendUserId,
                                                      @Param("acceptUserId") String acceptUserId);
+
+    int deleteBySendUserIdAndAcceptUserId(@Param("sendUserId") String sendUserId,
+                                          @Param("acceptUserId") String acceptUserId);
 }

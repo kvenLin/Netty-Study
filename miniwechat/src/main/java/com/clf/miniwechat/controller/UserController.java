@@ -2,6 +2,7 @@ package com.clf.miniwechat.controller;
 
 import com.clf.miniwechat.bo.UsersBO;
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.enums.OperatorFriendRequestTypeEnum;
 import com.clf.miniwechat.enums.SearchFriendsStatusEnum;
 import com.clf.miniwechat.service.UserService;
 import com.clf.miniwechat.utils.FastDFSClient;
@@ -151,5 +152,28 @@ public class UserController {
             return MyJSONResult.errorMsg("用户不存在");
         }
         return MyJSONResult.ok(userService.queryFriendRequestList(userId));
+    }
+
+    @PostMapping("/operFriendRequest")
+    public MyJSONResult operFriendRequest(String acceptUserId, 
+                                          String sendUserId,
+                                          Integer operType) {
+        if(StringUtils.isEmpty(acceptUserId) ||
+                StringUtils.isEmpty(sendUserId) ||
+                operType == null) {
+            return MyJSONResult.errorMsg("参数不能为空");
+        }
+        if(StringUtils.isEmpty(OperatorFriendRequestTypeEnum.getMsgByType(operType))) {
+            return MyJSONResult.errorMsg("操作类型不能为空");
+        }
+
+        if(OperatorFriendRequestTypeEnum.IGNORE.getType() == operType) {
+            //1.忽略好友请求,删除请求记录
+            userService.deleteFriendRequest(sendUserId, acceptUserId);
+        } else if(OperatorFriendRequestTypeEnum.PASS.getType() == operType) {
+            //2.通过请求,则增加好友关系,然后删除好友请求记录
+            userService.passFriendRequest(sendUserId, acceptUserId);
+        }
+        return MyJSONResult.ok();
     }
 }

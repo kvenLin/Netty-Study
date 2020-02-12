@@ -165,6 +165,31 @@ public class UserServiceImpl implements UserService {
         return usersMapper.queryFriendRequestList(acceptUserId);
     }
 
+    @Override
+    public void deleteFriendRequest(String sendUserId, String acceptUserId) {
+        friendsRequestMapper.deleteBySendUserIdAndAcceptUserId(sendUserId, acceptUserId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void passFriendRequest(String sendUserId, String acceptUserId) {
+        //1.保存好友
+        saveFriends(sendUserId, acceptUserId);
+        //2.逆向保存好友
+        saveFriends(acceptUserId, sendUserId);
+        //3.删除好友请求记录
+        deleteFriendRequest(sendUserId, acceptUserId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveFriends(String sendUserId, String acceptUserId) {
+        MyFriends myFriends = new MyFriends();
+        myFriends.setId(sid.nextShort());
+        myFriends.setMyUserId(sendUserId);
+        myFriends.setMyFriendUserId(acceptUserId);
+        myFriendsMapper.insert(myFriends);
+    }
+
     @Transactional(propagation = Propagation.SUPPORTS)
     public Users queryUserById(String userId) {
         return usersMapper.selectByPrimaryKey(userId);

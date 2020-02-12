@@ -11,6 +11,11 @@
     delete from friends_request
     where id = #{id,jdbcType=VARCHAR}
   </delete>
+  <delete id="deleteBySendUserIdAndAcceptUserId" parameterType="java.lang.String">
+    delete from friends_request
+    where send_user_id = #{sendUserId}
+    and accept_user_id = #{acceptUserId} limit 1
+  </delete>
   <insert id="insert" parameterType="com.clf.miniwechat.domain.FriendsRequest" >
     insert into friends_request (id, send_user_id, accept_user_id, 
       request_date_time)

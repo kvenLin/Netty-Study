@@ -31,4 +31,9 @@
     select id, my_user_id, my_friend_user_id
     from my_friends
   </select>
+  <select id="selectByMyUserIdAndFriendId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select id, my_user_id, my_friend_user_id
+    from my_friends
+    where my_user_id = #{myUserId} and my_friend_user_id = #{friendUserId} limit 1
+  </select>
 </mapper>

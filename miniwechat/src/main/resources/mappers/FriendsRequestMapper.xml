@@ -33,4 +33,10 @@
     select id, send_user_id, accept_user_id, request_date_time
     from friends_request
   </select>
+  <select id="selectBySendUserIdAndAcceptUserId" resultMap="BaseResultMap" parameterType="java.lang.String">
+    select id, send_user_id, accept_user_id, request_date_time
+    from friends_request
+    where send_user_id = #{sendUserId}
+    and accept_user_id = #{acceptUserId} limit 1
+  </select>
 </mapper>

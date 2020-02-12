@@ -2,6 +2,7 @@ package com.clf.miniwechat.controller;
 
 import com.clf.miniwechat.bo.UsersBO;
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.enums.SearchFriendsStatusEnum;
 import com.clf.miniwechat.service.UserService;
 import com.clf.miniwechat.utils.FastDFSClient;
 import com.clf.miniwechat.utils.FileUtils;
@@ -62,7 +63,7 @@ public class UserController {
 
     @PostMapping("/uploadFaceBase64")
     public MyJSONResult uploadFaceBase64(@RequestBody UsersBO usersBO) throws Exception {
-        log.error("test...");
+        //TODO,图片太大导致上传失败的错误提示
         //获取前端传过来的base64字符串,然后转换为文件对象再上传
         String base64Data = usersBO.getFaceData();
         String userFacePath = tmpFilePath + usersBO.getUserId() + "userFace.png";
@@ -74,7 +75,7 @@ public class UserController {
         log.warn(url);
 
         //获取缩略图的url
-        String thump = "_8080.";
+        String thump = "_80x80.";
         String arr[] = url.split("\\.");
         String thumpImgUrl = arr[0] + thump + arr[1];
 
@@ -84,6 +85,71 @@ public class UserController {
         user.setFaceImage(thumpImgUrl);
         user.setFaceImageBig(url);
         user = userService.updateUserInfo(user);
-        return MyJSONResult.ok(user);
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(user, usersVO);
+        return MyJSONResult.ok(usersVO);
+    }
+
+    @PostMapping("/setNickname")
+    public MyJSONResult setNickname(@RequestBody UsersBO usersBO) {
+        if(StringUtils.isEmpty(usersBO.getNickname())) {
+            return MyJSONResult.errorMsg("昵称不能为空");
+        }
+        Users user = new Users();
+        user.setId(usersBO.getUserId());
+        user.setNickname(usersBO.getNickname());
+        user = userService.updateUserInfo(user);
+        UsersVO usersVO = new UsersVO();
+        BeanUtils.copyProperties(user, usersVO);
+        return MyJSONResult.ok(usersVO);
+    }
+
+    /**
+     * 搜索好友接口,根据账号做匹配查找
+     * @param myUserId
+     * @param friendUsername
+     * @return
+     */
+    @PostMapping("/search")
+    public MyJSONResult searchUser(String myUserId, String friendUsername) {
+        if(StringUtils.isEmpty(myUserId) || StringUtils.isEmpty(friendUsername)) {
+            return MyJSONResult.errorMsg("参数不能为空");
+        }
+        Integer status = userService.preSearchFriends(myUserId, friendUsername);
+        if(SearchFriendsStatusEnum.SUCCESS.status == status) {
+            Users user = userService.queryUserInfoByUsername(friendUsername);
+            UsersVO userVO = new UsersVO();
+            BeanUtils.copyProperties(user, userVO);
+            return MyJSONResult.ok(userVO);
+        } else {
+            return MyJSONResult.errorMsg(SearchFriendsStatusEnum.getMsgByKey(status));
+        }
+    }
+
+    @PostMapping("/addFriendRequest")
+    public MyJSONResult addFriendRequest(String myUserId, String friendUsername) {
+        if(StringUtils.isEmpty(myUserId) || StringUtils.isEmpty(friendUsername)) {
+            return MyJSONResult.errorMsg("参数不能为空");
+        }
+        Integer status = userService.preSearchFriends(myUserId, friendUsername);
+        if(SearchFriendsStatusEnum.SUCCESS.status == status) {
+            userService.sendFriendRequest(myUserId, friendUsername);
+        }else {
+            return MyJSONResult.errorMsg(SearchFriendsStatusEnum.getMsgByKey(status));
+        }
+        return MyJSONResult.ok();
+    }
+
+    /**
+     * 查询用户的好友申请
+     * @param userId
+     * @return
+     */
+    @PostMapping("/queryFriendRequests")
+    public MyJSONResult queryFriendRequests(String userId) {
+        if(StringUtils.isEmpty(userId)) {
+            return MyJSONResult.errorMsg("用户不存在");
+        }
+        return MyJSONResult.ok(userService.queryFriendRequestList(userId));
     }
 }

@@ -24,10 +24,6 @@ public class MyJSONResult {
     
     private String ok;	// 不使用
 
-    public static MyJSONResult build(Integer status, String msg, Object data) {
-        return new MyJSONResult(status, msg, data);
-    }
-
     public static MyJSONResult ok(Object data) {
         return new MyJSONResult(data);
     }
@@ -51,14 +47,6 @@ public class MyJSONResult {
     public static MyJSONResult errorException(String msg) {
         return new MyJSONResult(555, msg, null);
     }
-
-    public MyJSONResult() {
-
-    }
-
-//    public static LeeJSONResult build(Integer status, String msg) {
-//        return new LeeJSONResult(status, msg, null);
-//    }
 
     public MyJSONResult(Integer status, String msg, Object data) {
         this.status = status;
@@ -108,4 +96,13 @@ public class MyJSONResult {
 		this.ok = ok;
 	}
 
+    @Override
+    public String toString() {
+        return "MyJSONResult{" +
+                "status=" + status +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                ", ok='" + ok + '\'' +
+                '}';
+    }
 }

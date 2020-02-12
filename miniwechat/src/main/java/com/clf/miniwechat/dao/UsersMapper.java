@@ -1,6 +1,8 @@
 package com.clf.miniwechat.dao;
 
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.vo.FriendRequestVO;
+
 import java.util.List;
 
 public interface UsersMapper {
@@ -9,6 +11,8 @@ public interface UsersMapper {
     int insert(Users record);
 
     Users selectByPrimaryKey(String id);
+
+    List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
 
     List<Users> selectAll();
 

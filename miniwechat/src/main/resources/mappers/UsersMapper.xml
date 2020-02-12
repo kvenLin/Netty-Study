@@ -11,6 +11,12 @@
     <result column="qrcode" property="qrcode" jdbcType="VARCHAR" />
     <result column="cid" property="cid" jdbcType="VARCHAR" />
   </resultMap>
+  <resultMap id="SendUserResultMap" type="com.clf.miniwechat.vo.FriendRequestVO">
+    <id column="id" property="sendUserId" jdbcType="VARCHAR"/>
+    <result column="username" property="sendUsername" jdbcType="VARCHAR"/>
+    <result column="nickname" property="sendNickname" jdbcType="VARCHAR"/>
+    <result column="face_image" property="sendFaceImage" jdbcType="VARCHAR"/>
+  </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from users
     where id = #{id,jdbcType=VARCHAR}
@@ -32,10 +38,10 @@
       <if test="password != null">
           `password` = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="face_image != null">
+      <if test="faceImage != null">
           face_image = #{faceImage,jdbcType=VARCHAR},
       </if>
-      <if test="face_image_big != null">
+      <if test="faceImageBig != null">
           face_image_big = #{faceImageBig,jdbcType=VARCHAR},
       </if>
       <if test="nickname != null">
@@ -50,6 +56,13 @@
     </trim>
     where id = #{id,jdbcType=VARCHAR}
   </update>
+  <select id="queryFriendRequestList" resultMap="SendUserResultMap" parameterType="java.lang.String">
+    select sender.id, sender.username, sender.nickname, sender.face_image
+    from friends_request fr
+    left join users sender
+    on fr.send_user_id = sender.id
+    where fr.accept_user_id = #{acceptUserId}
+  </select>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select id, username, `password`, face_image, face_image_big, nickname, qrcode, cid
     from users
@@ -62,6 +75,6 @@
   <select id="selectOne" resultMap="BaseResultMap" parameterType="java.lang.String">
     select id, username, `password`, face_image, face_image_big, nickname, qrcode, cid
     from users
-    where username = #{username}
+    where username = #{username} limit 1
   </select>
 </mapper>

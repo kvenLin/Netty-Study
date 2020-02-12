@@ -1,6 +1,9 @@
 package com.clf.miniwechat.service;
 
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.vo.FriendRequestVO;
+
+import java.util.List;
 
 /**
  * @Author: clf
@@ -28,7 +31,7 @@ public interface UserService {
      * @param user
      * @return
      */
-    Users saveUser(Users user) throws Exception;
+    Users saveUser(Users user);
 
     /**
      * 更新用户信息
@@ -36,4 +39,33 @@ public interface UserService {
      * @return
      */
     Users updateUserInfo(Users user);
+
+    /**
+     * 搜索好友前置条件
+     * @param myUserId
+     * @param friendUsername
+     * @return
+     */
+    Integer preSearchFriends(String myUserId, String friendUsername);
+
+    /**
+     * 根据用户名查询用户
+     * @param username
+     * @return
+     */
+    Users queryUserInfoByUsername(String username);
+
+    /**
+     * 添加好友请求记录保存到数据库
+     * @param myUserId
+     * @param friendUsername
+     */
+    void sendFriendRequest(String myUserId, String friendUsername);
+
+    /**
+     * 查询好友请求
+     * @param acceptUserId
+     * @return
+     */
+    List<FriendRequestVO> queryFriendRequestList(String acceptUserId);
 }

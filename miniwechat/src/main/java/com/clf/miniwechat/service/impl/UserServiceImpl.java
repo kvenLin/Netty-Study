@@ -1,18 +1,23 @@
 package com.clf.miniwechat.service.impl;
 
+import com.clf.miniwechat.dao.ChatMsgMapper;
 import com.clf.miniwechat.dao.FriendsRequestMapper;
 import com.clf.miniwechat.dao.MyFriendsMapper;
 import com.clf.miniwechat.dao.UsersMapper;
+import com.clf.miniwechat.domain.ChatMsg;
 import com.clf.miniwechat.domain.FriendsRequest;
 import com.clf.miniwechat.domain.MyFriends;
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.enums.MsgSignFlagEnum;
 import com.clf.miniwechat.enums.SearchFriendsStatusEnum;
+import com.clf.miniwechat.netty.ChatMsgNio;
 import com.clf.miniwechat.service.UserService;
 import com.clf.miniwechat.utils.FastDFSClient;
 import com.clf.miniwechat.utils.FileUtils;
 import com.clf.miniwechat.utils.MD5Utils;
 import com.clf.miniwechat.utils.QRCodeUtils;
 import com.clf.miniwechat.vo.FriendRequestVO;
+import com.clf.miniwechat.vo.MyFriendsVO;
 import lombok.extern.slf4j.Slf4j;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +52,8 @@ public class UserServiceImpl implements UserService {
     private MyFriendsMapper myFriendsMapper;
     @Autowired
     private FriendsRequestMapper friendsRequestMapper;
+    @Autowired
+    private ChatMsgMapper chatMsgMapper;
     @Value("${tmpFilePath}")
     private String tmpFilePath;
 
@@ -179,6 +186,32 @@ public class UserServiceImpl implements UserService {
         saveFriends(acceptUserId, sendUserId);
         //3.删除好友请求记录
         deleteFriendRequest(sendUserId, acceptUserId);
+    }
+
+    @Transactional(propagation =  Propagation.SUPPORTS)
+    @Override
+    public List<MyFriendsVO> queryFriends(String userId) {
+        return usersMapper.queryMyFriends(userId);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public String saveMsg(ChatMsgNio chatMsgNio) {
+        ChatMsg msg = new ChatMsg();
+        msg.setId(sid.nextShort());
+        msg.setSendUserId(chatMsgNio.getSenderId());
+        msg.setAcceptUserId(chatMsgNio.getReceiverId());
+        msg.setMsg(chatMsgNio.getMsg());
+        msg.setCreateTime(new Date());
+        msg.setSignFlag(MsgSignFlagEnum.unsign.type);
+        chatMsgMapper.insert(msg);
+        return msg.getId();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    @Override
+    public void updateMsgSigned(List<String> msgIdList) {
+        chatMsgMapper.batchUpdateMsgSigned(msgIdList);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

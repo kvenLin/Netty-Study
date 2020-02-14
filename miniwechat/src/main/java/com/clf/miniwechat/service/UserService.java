@@ -1,7 +1,9 @@
 package com.clf.miniwechat.service;
 
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.netty.ChatMsgNio;
 import com.clf.miniwechat.vo.FriendRequestVO;
+import com.clf.miniwechat.vo.MyFriendsVO;
 
 import java.util.List;
 
@@ -83,4 +85,23 @@ public interface UserService {
      */
     void passFriendRequest(String sendUserId, String acceptUserId);
 
+    /**
+     * 查询好友列表
+     * @param userId
+     * @return
+     */
+    List<MyFriendsVO> queryFriends(String userId);
+
+    /**
+     * 保存聊天消息到数据库
+     * @param chatMsgNio
+     * @return
+     */
+    String saveMsg(ChatMsgNio chatMsgNio);
+
+    /**
+     * 批量签收消息
+     * @param msgIdList
+     */
+    void updateMsgSigned(List<String> msgIdList);
 }

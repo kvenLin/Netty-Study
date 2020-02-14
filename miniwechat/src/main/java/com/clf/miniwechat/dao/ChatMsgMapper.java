@@ -13,4 +13,6 @@ public interface ChatMsgMapper {
     List<ChatMsg> selectAll();
 
     int updateByPrimaryKey(ChatMsg record);
+
+    void batchUpdateMsgSigned(List<String> msgIdList);
 }

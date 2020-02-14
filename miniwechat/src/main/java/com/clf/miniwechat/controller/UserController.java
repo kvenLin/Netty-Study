@@ -9,6 +9,7 @@ import com.clf.miniwechat.utils.FastDFSClient;
 import com.clf.miniwechat.utils.FileUtils;
 import com.clf.miniwechat.utils.MD5Utils;
 import com.clf.miniwechat.utils.MyJSONResult;
+import com.clf.miniwechat.vo.MyFriendsVO;
 import com.clf.miniwechat.vo.UsersVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * @Author: clf
@@ -154,6 +157,13 @@ public class UserController {
         return MyJSONResult.ok(userService.queryFriendRequestList(userId));
     }
 
+    /**
+     * 对好友请求进行处理
+     * @param acceptUserId
+     * @param sendUserId
+     * @param operType
+     * @return
+     */
     @PostMapping("/operFriendRequest")
     public MyJSONResult operFriendRequest(String acceptUserId, 
                                           String sendUserId,
@@ -174,6 +184,22 @@ public class UserController {
             //2.通过请求,则增加好友关系,然后删除好友请求记录
             userService.passFriendRequest(sendUserId, acceptUserId);
         }
-        return MyJSONResult.ok();
+        //查询好友列表
+        List<MyFriendsVO> myFriends = userService.queryFriends(acceptUserId);
+        return MyJSONResult.ok(myFriends);
+    }
+
+    /**
+     * 查询我的好友列表
+     * @param userId
+     * @return
+     */
+    @PostMapping("/myFriends")
+    public MyJSONResult myFriends(String userId) {
+        if(StringUtils.isEmpty(userId)) {
+            return MyJSONResult.errorMsg("用户id不能为空");
+        }
+        List<MyFriendsVO> myFriends = userService.queryFriends(userId);
+        return MyJSONResult.ok(myFriends);
     }
 }

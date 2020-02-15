@@ -29,7 +29,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
     /**
      * 用于记录和管理所有客户端的channel
      */
-    private static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
+    public static ChannelGroup users = new DefaultChannelGroup(GlobalEventExecutor.INSTANCE);
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg)
@@ -46,9 +46,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             String senderId = dataContent.getChatMsgNio().getSenderId();
             UserChannelRel.put(senderId, currentChannel);
             for (Channel user : users) {
-                log.info(user.id().asLongText());
+                log.info("============== websocket建立连接, channelId = "  + user.id().asLongText() + "=================");
             }
-            UserChannelRel.outPut();
+//            UserChannelRel.outPut(); // 输出所有userId和对应的channelId的信息
         } else if(action == MsgActionEnum.CHAT.type) {
             //2.2. 聊天类型的消息, 把聊天记录保存数据库, 同时标记消息的签收状态[未签收]
             ChatMsgNio chatMsgNio = dataContent.getChatMsgNio();
@@ -103,7 +103,7 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             }
         } else if(action == MsgActionEnum.KEEPALIVE.type) {
             //2.4. 心跳类型的消息
-
+            log.warn("收到来自channel为: [" + currentChannel + "] 的心跳包...." );
         }
     }
 

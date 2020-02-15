@@ -87,6 +87,9 @@ public class UserServiceImpl implements UserService {
         //注册
         user.setId(sid.nextShort());
         user.setNickname(user.getUsername());
+        //设置默认头像
+        user.setFaceImage("M00/00/00/rBDLCV5GQmOAcsypAAALkzq5T6A811_80x80.png");
+        user.setFaceImageBig("M00/00/00/rBDLCV5GQmOAcsypAAALkzq5T6A811.png");
         //为每个用户生成一个唯一的二维码
 
         String qrCodePath = tmpFilePath + user.getId() + "qrcode.png";
@@ -100,8 +103,6 @@ public class UserServiceImpl implements UserService {
             //todo
         }
         user.setQrcode(qrCodeUrl);
-        user.setFaceImage("");
-        user.setFaceImageBig("");
         try {
             user.setPassword(MD5Utils.getMD5Str(user.getPassword()));
         } catch (Exception e) {

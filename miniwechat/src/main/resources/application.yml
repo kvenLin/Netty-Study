@@ -3,8 +3,6 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    #注意如果数据库中时间是否和真实时间一致,不一致的话需要对serverTimezone进行配置
-    url: jdbc:mysql://localhost:3306/wechat-dev?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     #配置HikariCP数据源
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -23,12 +21,6 @@ spring:
       #一个连接的生命时长（毫秒），超时且没有被使用则释放，默认30分钟1800000ms
       max-lifetime: 28740000
       connection-test-query: SELECT 1
-  redis:
-    port: 6379
-    host: localhost
-mybatis:
-  type-aliases-package: com.swpu.uchain.openexperiment.domain
-  mapper-locations: classpath:mappers/*.xml
 ###security###
 jwt:
   secret: swpu-uchain

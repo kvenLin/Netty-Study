@@ -48,4 +48,9 @@
     select id, send_user_id, accept_user_id, msg, sign_flag, create_time
     from chat_msg
   </select>
+  <select id="selectByAcceptUserIdAndSignType" resultMap="BaseResultMap">
+    select id, send_user_id, accept_user_id, msg, sign_flag, create_time
+    from chat_msg
+    where accept_user_id = #{acceptUserId} and sign_flag = #{type}
+  </select>
 </mapper>

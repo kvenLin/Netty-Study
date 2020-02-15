@@ -8,16 +8,18 @@ import com.clf.miniwechat.domain.ChatMsg;
 import com.clf.miniwechat.domain.FriendsRequest;
 import com.clf.miniwechat.domain.MyFriends;
 import com.clf.miniwechat.domain.Users;
+import com.clf.miniwechat.enums.MsgActionEnum;
 import com.clf.miniwechat.enums.MsgSignFlagEnum;
 import com.clf.miniwechat.enums.SearchFriendsStatusEnum;
 import com.clf.miniwechat.netty.ChatMsgNio;
+import com.clf.miniwechat.netty.DataContent;
+import com.clf.miniwechat.netty.UserChannelRel;
 import com.clf.miniwechat.service.UserService;
-import com.clf.miniwechat.utils.FastDFSClient;
-import com.clf.miniwechat.utils.FileUtils;
-import com.clf.miniwechat.utils.MD5Utils;
-import com.clf.miniwechat.utils.QRCodeUtils;
+import com.clf.miniwechat.utils.*;
 import com.clf.miniwechat.vo.FriendRequestVO;
 import com.clf.miniwechat.vo.MyFriendsVO;
+import io.netty.channel.Channel;
+import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.extern.slf4j.Slf4j;
 import org.n3r.idworker.Sid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -186,6 +188,16 @@ public class UserServiceImpl implements UserService {
         saveFriends(acceptUserId, sendUserId);
         //3.删除好友请求记录
         deleteFriendRequest(sendUserId, acceptUserId);
+
+        Channel channel = UserChannelRel.get(sendUserId);
+        if(channel != null) {
+            //使用websocket主动推送消息到请求发起者, 更新他的通讯录列表为最新
+            DataContent dataContent = new DataContent();
+            dataContent.setAction(MsgActionEnum.PULL_FRIEND.type);
+            channel.writeAndFlush(
+                    new TextWebSocketFrame(
+                            JsonUtils.objectToJson(dataContent)));
+        }
     }
 
     @Transactional(propagation =  Propagation.SUPPORTS)
@@ -212,6 +224,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateMsgSigned(List<String> msgIdList) {
         chatMsgMapper.batchUpdateMsgSigned(msgIdList);
+    }
+
+    @Transactional(propagation = Propagation.SUPPORTS)
+    @Override
+    public List<ChatMsg> getUnReadMsgList(String acceptUserId) {
+        return chatMsgMapper.selectByAcceptUserIdAndSignType(acceptUserId, MsgSignFlagEnum.unsign.type);
     }
 
     @Transactional(propagation = Propagation.REQUIRED)

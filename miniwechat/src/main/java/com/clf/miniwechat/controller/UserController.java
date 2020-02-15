@@ -1,6 +1,7 @@
 package com.clf.miniwechat.controller;
 
 import com.clf.miniwechat.bo.UsersBO;
+import com.clf.miniwechat.domain.ChatMsg;
 import com.clf.miniwechat.domain.Users;
 import com.clf.miniwechat.enums.OperatorFriendRequestTypeEnum;
 import com.clf.miniwechat.enums.SearchFriendsStatusEnum;
@@ -202,4 +203,20 @@ public class UserController {
         List<MyFriendsVO> myFriends = userService.queryFriends(userId);
         return MyJSONResult.ok(myFriends);
     }
+
+    /**
+     * 用户手机端获取未签收的消息列表
+     * @param acceptUserId
+     * @return
+     */
+    @PostMapping("/getUnReadMsgList")
+    public MyJSONResult getUnReadMsgList(String acceptUserId) {
+        if(StringUtils.isEmpty(acceptUserId)) {
+            return MyJSONResult.errorMsg("用户id不能为空");
+        }
+        //查询列表
+        List<ChatMsg> unReadMsgList = userService.getUnReadMsgList(acceptUserId);
+        return MyJSONResult.ok(unReadMsgList);
+    }
+
 }

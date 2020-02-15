@@ -45,7 +45,10 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             //2.1. 当websocket第一次open的时候,初始化channel, 把用户的channel和userId关联起来
             String senderId = dataContent.getChatMsgNio().getSenderId();
             UserChannelRel.put(senderId, currentChannel);
-
+            for (Channel user : users) {
+                log.info(user.id().asLongText());
+            }
+            UserChannelRel.outPut();
         } else if(action == MsgActionEnum.CHAT.type) {
             //2.2. 聊天类型的消息, 把聊天记录保存数据库, 同时标记消息的签收状态[未签收]
             ChatMsgNio chatMsgNio = dataContent.getChatMsgNio();
@@ -58,6 +61,9 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             String msgId = userService.saveMsg(chatMsgNio);
             chatMsgNio.setMsgId(msgId);
 
+            DataContent dataContentMsg = new DataContent();
+            dataContentMsg.setAction(MsgActionEnum.CHAT.type);
+            dataContentMsg.setChatMsgNio(chatMsgNio);
             //发送消息
             //从全局用户channel关系中获取接受方的channel
             Channel receiverChannel = UserChannelRel.get(receiverId);
@@ -66,9 +72,12 @@ public class ChatHandler extends SimpleChannelInboundHandler<TextWebSocketFrame>
             } else {
                 //当receiverChannel不为空的时候, 从ChannelGroup中去查找对应的Channel是否存在
                 Channel findChannel = users.find(receiverChannel.id());
+                log.info("接收消息: " + dataContentMsg.toString());
                 if(findChannel != null) {
                     //用户在线
-                    receiverChannel.writeAndFlush(new TextWebSocketFrame(JsonUtils.objectToJson(chatMsgNio)));
+                    findChannel.writeAndFlush(
+                            new TextWebSocketFrame(
+                                    JsonUtils.objectToJson(dataContentMsg)));
                 } else {
                     //用户离线 TODO 推送消息
                 }

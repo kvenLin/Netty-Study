@@ -3,6 +3,7 @@ package com.clf.miniwechat.netty;
 import io.netty.channel.Channel;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @Author: clf
@@ -18,5 +19,12 @@ public class UserChannelRel {
 
     public static Channel get(String senderId) {
         return manager.get(senderId);
+    }
+
+    public static void outPut() {
+        for (Map.Entry<String, Channel> entry : manager.entrySet()) {
+            System.out.println("UserId: " + entry.getKey()
+                    + ", ChannelId: " + entry.getValue().id().asLongText());
+        }
     }
 }

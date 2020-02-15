@@ -3,7 +3,8 @@ spring:
     active: dev
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/wechat-dev?characterEncoding=utf-8&useSSL=false
+    #注意如果数据库中时间是否和真实时间一致,不一致的话需要对serverTimezone进行配置
+    url: jdbc:mysql://localhost:3306/wechat-dev?characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
     #配置HikariCP数据源
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
